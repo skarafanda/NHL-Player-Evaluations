@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, Arc
 from datetime import date
 
-#Returns a list of all Game IDs today (at the date when the function is called).
+# Returns a list of all Game IDs today (at the date when the function is called).
 # def getGamePk():
 #     gameIds = []
 
@@ -19,7 +19,7 @@ from datetime import date
 #     #print(gameIds)
 #     return gameIds
 
-#Returns the Game ID given the team name of one of the teams and the date of the game in YYYY-MM-DD format.
+# Returns the Game ID given the team name of one of the teams and the date of the game in YYYY-MM-DD format.
 def getGamePk(fullTeamName, date):
     #baseurl = "https://statsapi.web.nhl.com/api/v1/schedule?date=" + date.today().strftime("%Y-%m-%d")
     baseurl = "https://statsapi.web.nhl.com/api/v1/schedule?date=" + date
@@ -33,13 +33,13 @@ def getGamePk(fullTeamName, date):
         if (fullTeamName in i["teams"]["away"]["team"]["name"]) or fullTeamName in i["teams"]["home"]["team"]["name"]:
             return str(i["gamePk"])
 
-#Returns a list of 2 dictionaries -- one for the home team and one for the away team -- and a time string. 
+# Returns a list of 2 dictionaries -- one for the home team and one for the away team -- and a time string. 
 # In these dictionaries, player names are mapped to "shots", and "goals" dictionaries 
 # that are composed of a list of tuples (shot coords).
 def getShotCoordinates(gameId):
     #print(gameId)
 
-    #List of 15 NHL teams that begin 1st period attacking right when they're the home team. 
+    # List of 15 NHL teams that begin 1st period attacking right when they're the home team. 
     homeRight = ["CBJ", "NJD", "NYI", "PIT", "BOS", "BUF", "OTT", "TBL", "ARI", "NSH", "STL", "ANA", "EDM", "SJS", "SEA"]
 
     baseurl = "https://statsapi.web.nhl.com/api/v1/game/" + gameId + "/feed/live"
@@ -53,13 +53,13 @@ def getShotCoordinates(gameId):
     homeDict = {homeTeam: {}}
     awayDict = {awayTeam: {}}
 
-    #Finding shot coordinates, possible reflections based on period & home/away, adding/appending to dictionary.
+    # Finding shot coordinates, possible reflections based on period & home/away, adding/appending to dictionary.
     liveData = data.get("liveData")
     plays = liveData["plays"]
     allPlays = plays["allPlays"]          
     for i in range(len(allPlays)):
 
-        #SHOTS
+        # SHOTS
         if allPlays[i]['result']['eventTypeId'] == "SHOT":
             x = allPlays[i].get("players")[0]
 
@@ -119,7 +119,7 @@ def getShotCoordinates(gameId):
                         else:
                             awayDict[awayTeam][x["player"]["fullName"]] = {"shots": [(allPlays[i].get("coordinates")["x"], allPlays[i].get("coordinates")["y"])], "goals": []}
         
-        #GOALS
+        # GOALS
         elif allPlays[i]['result']['eventTypeId'] == "GOAL":
             x = allPlays[i].get("players")[0]
 
@@ -177,7 +177,7 @@ def getShotCoordinates(gameId):
                         else:
                             awayDict[awayTeam][x["player"]["fullName"]] = {"shots": [], "goals": [(allPlays[i].get("coordinates")["x"], allPlays[i].get("coordinates")["y"])]}
     
-    #Finding time remaining.
+    # Finding time remaining.
     timeStr = ""
     if liveData["linescore"]["currentPeriodTimeRemaining"] == "Final" and (liveData["linescore"]["currentPeriodOrdinal"][1:] == "OT"):
         timeStr = liveData["linescore"]["currentPeriodTimeRemaining"] + " (" + liveData["linescore"]["currentPeriodOrdinal"] + ")"
@@ -191,7 +191,7 @@ def getShotCoordinates(gameId):
     return([homeDict, awayDict, timeStr])
 
 def plotShots(shotList):
-    #Building rink
+    # Building rink
     x = [0.0, 69.0, -69.0, 69.0, -69.0, 20.0, -20.0, 20.0, -20.0]
     y = [0.0, 22.0, -22.0, -22.0, 22.0, -22.0, -22.0, 22.0, 22.0]
     x_adjusted = [x2 + 100 for x2 in x] #translate to positive coordinate system
