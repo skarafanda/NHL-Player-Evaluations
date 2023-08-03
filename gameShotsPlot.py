@@ -247,7 +247,7 @@ def plotShots(shotList):
 
     homeGoals = 0
     awayGoals = 0
-
+    # Commented-out code in this section offers a different style than the current scatter & text. Uncomment and comment the other lines to see changes!
     for i in hShot.keys():
         for s in hShot[i]["shots"]:
             # ax.scatter(s[0] + 100, s[1] + 42, c="darkseagreen", linewidths=.5, marker="s", edgecolor="black", s=100, alpha=.8)
