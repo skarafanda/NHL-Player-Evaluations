@@ -4,7 +4,8 @@ import numpy as np
 
 def getP60chart():
     playerName = input("Player Full Name: ")
-
+    
+    #The below file is created after running the getLeagueStats code which collects data from the NHL API. 
     df = pd.read_csv('LeagueStats_2022-23.csv')
 
     #Sorting dataframe by highest P/60 and dropping unnecessary columns.
